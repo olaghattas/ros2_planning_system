@@ -36,6 +36,8 @@
 #include "plansys2_msgs/srv/get_domain_durative_action_details.hpp"
 #include "plansys2_msgs/srv/get_node_details.hpp"
 #include "plansys2_msgs/srv/get_states.hpp"
+#include "plansys2_msgs/srv/set_domain.hpp"
+
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -138,11 +140,13 @@ public:
    * \return A string containing the domain.
    */
   std::string getDomain();
+  bool setDomain(const std::string& domain_path);
 
 private:
   rclcpp::Node::SharedPtr node_;
 
   rclcpp::Client<plansys2_msgs::srv::GetDomain>::SharedPtr get_domain_client_;
+  rclcpp::Client<plansys2_msgs::srv::SetDomain>::SharedPtr set_domain_client_;
   rclcpp::Client<plansys2_msgs::srv::GetDomainName>::SharedPtr get_name_client_;
   rclcpp::Client<plansys2_msgs::srv::GetDomainTypes>::SharedPtr get_types_client_;
   rclcpp::Client<plansys2_msgs::srv::GetDomainConstants>::SharedPtr get_constants_client_;

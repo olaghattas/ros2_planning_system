@@ -41,6 +41,7 @@
 #include "plansys2_msgs/srv/remove_problem_goal.hpp"
 #include "std_msgs/msg/empty.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "plansys2_msgs/srv/set_domain.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
@@ -195,6 +196,11 @@ public:
     const std::shared_ptr<plansys2_msgs::srv::AffectNode::Request> request,
     const std::shared_ptr<plansys2_msgs::srv::AffectNode::Response> response);
 
+  void set_problem_service_callback(
+    const std::shared_ptr<rmw_request_id_t> request_header,
+    const std::shared_ptr<plansys2_msgs::srv::SetDomain::Request> request,
+    const std::shared_ptr<plansys2_msgs::srv::SetDomain::Response> response);
+
 private:
   std::shared_ptr<ProblemExpert> problem_expert_;
 
@@ -250,6 +256,8 @@ private:
     exist_problem_function_service_;
   rclcpp::Service<plansys2_msgs::srv::AffectNode>::SharedPtr
     update_problem_function_service_;
+  rclcpp::Service<plansys2_msgs::srv::SetDomain>::SharedPtr
+    set_problem_service_;
 
   rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::Empty>::SharedPtr update_pub_;
   rclcpp_lifecycle::LifecyclePublisher<plansys2_msgs::msg::Knowledge>::SharedPtr knowledge_pub_;

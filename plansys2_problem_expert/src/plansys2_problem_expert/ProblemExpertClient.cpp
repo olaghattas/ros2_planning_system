@@ -93,6 +93,8 @@ ProblemExpertClient::ProblemExpertClient()
   is_problem_goal_satisfied_client_ =
     node_->create_client<plansys2_msgs::srv::IsProblemGoalSatisfied>(
     "problem_expert/is_problem_goal_satisfied");
+  set_problem_client_ = node_->create_client<plansys2_msgs::srv::SetDomain>(
+            "problem_expert/set_domain");
 }
 
 std::vector<plansys2::Instance>
@@ -1053,5 +1055,35 @@ ProblemExpertClient::addProblem(const std::string & problem_str)
   }
 }
 
+
+bool ProblemExpertClient::setDomain(const std::string& domain_path)
+{
+    bool ret = false;
+
+    while (!set_problem_client_->wait_for_service(std::chrono::seconds(1))) {
+        if (!rclcpp::ok()) {
+            return ret;
+        }
+        RCLCPP_ERROR_STREAM(
+                node_->get_logger(),
+                set_problem_client_->get_service_name() <<
+                                                       " service client: waiting for service to appear...");
+    }
+
+    auto request = std::make_shared<plansys2_msgs::srv::SetDomain::Request>();
+    request->domain = domain_path;
+
+    auto future_result = set_problem_client_->async_send_request(request);
+
+    if (rclcpp::spin_until_future_complete(node_, future_result, std::chrono::seconds(1)) !=
+        rclcpp::FutureReturnCode::SUCCESS)
+    {
+        return ret;
+    }
+
+    auto result = *future_result.get();
+    ret = result.success;
+    return ret;
+}
 
 }  // namespace plansys2

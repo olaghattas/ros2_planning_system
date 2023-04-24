@@ -29,6 +29,7 @@
 #include "plansys2_msgs/srv/get_domain_action_details.hpp"
 #include "plansys2_msgs/srv/get_domain_durative_action_details.hpp"
 #include "plansys2_msgs/srv/get_domain.hpp"
+#include "plansys2_msgs/srv/set_domain.hpp"
 #include "plansys2_msgs/srv/get_node_details.hpp"
 #include "plansys2_msgs/srv/get_states.hpp"
 
@@ -211,6 +212,11 @@ public:
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<plansys2_msgs::srv::GetDomain::Request> request,
     const std::shared_ptr<plansys2_msgs::srv::GetDomain::Response> response);
+  void set_domain_service_callback(
+    const std::shared_ptr<rmw_request_id_t> request_header,
+    const std::shared_ptr<plansys2_msgs::srv::SetDomain::Request> request,
+    const std::shared_ptr<plansys2_msgs::srv::SetDomain::Response> response);
+
 
 private:
   std::shared_ptr<DomainExpert> domain_expert_;
@@ -233,6 +239,7 @@ private:
   rclcpp::Service<plansys2_msgs::srv::GetNodeDetails>::SharedPtr
     get_domain_function_details_service_;
   rclcpp::Service<plansys2_msgs::srv::GetDomain>::SharedPtr get_domain_service_;
+  rclcpp::Service<plansys2_msgs::srv::SetDomain>::SharedPtr set_domain_service_;
 };
 
 }  // namespace plansys2

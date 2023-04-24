@@ -236,6 +236,13 @@ ProblemExpertNode::ProblemExpertNode()
   knowledge_pub_ = create_publisher<plansys2_msgs::msg::Knowledge>(
     "problem_expert/knowledge",
     rclcpp::QoS(100).transient_local());
+
+  set_problem_service_ = create_service<plansys2_msgs::srv::SetDomain>(
+        "problem_expert/set_domain", std::bind(
+                &ProblemExpertNode::set_problem_service_callback,
+                this, std::placeholders::_1, std::placeholders::_2,
+                std::placeholders::_3));
+
 }
 
 
@@ -865,5 +872,29 @@ ProblemExpertNode::get_knowledge_as_msg() const
   return ret_msgs;
 }
 
+
+void
+ProblemExpertNode::set_problem_service_callback(
+        const std::shared_ptr<rmw_request_id_t> request_header,
+        const std::shared_ptr<plansys2_msgs::srv::SetDomain::Request> request,
+        const std::shared_ptr<plansys2_msgs::srv::SetDomain::Response> response)
+{
+
+    if (problem_expert_ == nullptr) {
+        response->success = false;
+        response->error_info = "Requesting service in non-active state";
+        RCLCPP_WARN(get_logger(), "Requesting service in non-active state");
+    } else {
+        auto model_files = tokenize(request->domain, ":");
+        std::ifstream domain_ifs(model_files[0]);
+        std::string domain_str((
+                                       std::istreambuf_iterator<char>(domain_ifs)),
+                               std::istreambuf_iterator<char>());
+
+        auto domain_expert = std::make_shared<DomainExpert>(domain_str);
+        problem_expert_ = std::make_shared<ProblemExpert>(domain_expert);
+        response->success = true;
+    }
+}
 
 }  // namespace plansys2

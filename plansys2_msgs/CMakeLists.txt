@@ -31,6 +31,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/ExistNode.srv"
   "srv/GetConditionals.srv"
   "srv/GetDomain.srv"
+  "srv/SetDomain.srv"
   "srv/GetDomainActionDetails.srv"
   "srv/GetDomainActions.srv"
   "srv/GetDomainConstants.srv"

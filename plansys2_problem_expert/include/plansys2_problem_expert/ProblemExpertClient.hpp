@@ -42,6 +42,7 @@
 #include "plansys2_msgs/srv/get_states.hpp"
 #include "plansys2_msgs/srv/is_problem_goal_satisfied.hpp"
 #include "plansys2_msgs/srv/remove_problem_goal.hpp"
+#include "plansys2_msgs/srv/set_domain.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -87,8 +88,11 @@ public:
   bool addProblem(const std::string & problem_str);
 
   rclcpp::Time getUpdateTime() const {return update_time_;}
+  bool setDomain(const std::string& domain_path);
+
 
 private:
+    rclcpp::Client<plansys2_msgs::srv::SetDomain>::SharedPtr set_problem_client_;
   rclcpp::Client<plansys2_msgs::srv::AddProblem>::SharedPtr
     add_problem_client_;
   rclcpp::Client<plansys2_msgs::srv::AddProblemGoal>::SharedPtr

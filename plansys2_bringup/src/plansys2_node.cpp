@@ -38,8 +38,8 @@ int main(int argc, char ** argv)
   auto domain_node = std::make_shared<plansys2::DomainExpertNode>();
   auto problem_node = std::make_shared<plansys2::ProblemExpertNode>();
   auto planner_node = std::make_shared<plansys2::PlannerNode>();
-
   auto parameter_node = std::make_shared<rclcpp::Node>("executor");
+
   parameter_node->declare_parameter("executor_type", "default_executor");
   std::string executor_name;
   parameter_node->get_parameter("executor_type", executor_name);
